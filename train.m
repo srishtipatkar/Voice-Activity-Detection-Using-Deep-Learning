@@ -1,7 +1,7 @@
 clc
 clear
-adsTrain = audioDatastore('google_speech/train', "Includesubfolders",true);
-adsValidation = audioDatastore('google_speech\validation', "Includesubfolders",true);
+adsTrain = audioDatastore('training_folder', "Includesubfolders",true);
+adsValidation = audioDatastore('validation_folder', "Includesubfolders",true);
 [data,adsInfo] = read(adsTrain);
 Fs = adsInfo.SampleRate;
 win = hamming(50e-3 * Fs,'periodic');
@@ -50,7 +50,7 @@ while numSamples < duration
         numSamples = numSamples + numel(data) + numSilenceSamples;
     end
 end
-[noise,f] = audioread("longNoise_mono16.mp3");
+[noise,f] = audioread("noise_audio"); %mono audio of 16k Hz
 noise = resample(noise,2,1);
 audioTraining = audioTraining(1:numel(noise));
 SNR = -10;
@@ -98,7 +98,7 @@ while numSamples < duration
         numSamples = numSamples + numel(data) + numSilenceSamples;
     end
 end
-noise = audioread("longNoise_mono16.mp3");
+noise = audioread("noise_audio"); %mono audio of 16k Hz
 noise = resample(noise,2,1);
 noise = noise(1:duration);
 audioValidation = audioValidation(1:numel(noise));
